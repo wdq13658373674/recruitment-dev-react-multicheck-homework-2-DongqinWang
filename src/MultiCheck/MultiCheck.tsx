@@ -9,6 +9,7 @@ export type Option = {
   value: string
 }
 
+
 /**
  * Notice:
  * 1. There should be a special `Select All` option with checkbox to control all passing options
@@ -53,8 +54,8 @@ export const MultiCheck: FC<Props> = (props) => {
   // initialize checkValues
   useEffect(() => {
     if (values) {
-      const exitValues = options.map(option => option.value).filter(value => values.indexOf(value) != -1);
-      exitValues.length != checkValues.length && setCheckValues(exitValues);
+      const existValues = options.map(option=>option.value).filter(value => values.indexOf(value) !== -1);
+      existValues.length !== checkValues.length && setCheckValues(existValues);
     }
   }, [values, options]);
 
@@ -72,7 +73,7 @@ export const MultiCheck: FC<Props> = (props) => {
 
     // passed to outside
     if (onChange) {
-      const newCheckArr = options.filter((option: Option) => checkValues.indexOf(option.value) != -1);
+      const newCheckArr = options.filter((option: Option) => checkValues.indexOf(option.value) !== -1);
       onChange(newCheckArr);
     }
   }, [checkValues]);
@@ -81,27 +82,29 @@ export const MultiCheck: FC<Props> = (props) => {
    * option change
    * @param target : eventTarget
    */
-  function onCheckChange(target: EventTarget & HTMLInputElement) {
+  function onCheckChange(e:any) {
+    let target = e.target;
     if (target.checked) {
-      const newcheckArr = [...checkValues, target.value];
-      setCheckValues(newcheckArr);
+      const newCheckArr = [...checkValues, target.value];
+      setCheckValues(newCheckArr);
     } else {
-      let inx = checkValues.indexOf(target.value);
-      checkValues.splice(inx, 1)
+      let idx = checkValues.indexOf(target.value);
+      checkValues.splice(idx, 1)
       setCheckValues([...checkValues]);
     }
   }
 
   /**
    * select all change
-   * @param target : eventTarget
+   * @param e : eventT
    */
-  function onCheckAllChange(target: EventTarget & HTMLInputElement) {
+  function onCheckAllChange(e:any) {
+    let target = e.target;
     if (target.checked) {
-      const newcheckArr = options.map((option: Option) => {
+      const newCheckArr = options.map((option: Option) => {
         return option.value;
       })
-      setCheckValues(newcheckArr);
+      setCheckValues(newCheckArr);
     } else {
       setCheckValues([]);
     }
@@ -119,8 +122,8 @@ export const MultiCheck: FC<Props> = (props) => {
       let column = Math.floor(index / maxRows);
       let row =(index - (column * maxRows));
 
-      if(fillColumns != 0
-          && (column > fillColumns || (column == fillColumns && row == (maxRows-1)))
+      if(fillColumns !== 0
+          && (column > fillColumns || (column === fillColumns && row === (maxRows-1)))
       ){
         row+=1;
           if(row >= (maxRows-1)){
@@ -136,24 +139,20 @@ export const MultiCheck: FC<Props> = (props) => {
 
   return <div>
     <Card
-      title={label}
+        data-testid="card"
+        title={label}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap'
-        }}
-      >
+      {/*<div>{label}</div>*/}
+      <div className="MultiCheck">
 
         {/* select all option*/}
         <div
+            data-testid="selectAll"
           style={{
             width: `${100 / columnsValues}%`,
-            order: 0
           }}
         >
           <LabelCheck
-            key='select all'
             option={{
               label: 'select all',
               value: '-1'
@@ -167,14 +166,17 @@ export const MultiCheck: FC<Props> = (props) => {
         {
           options.map((option: Option, index: number) => {
             return (
-              <div style={{
-                order: getFlexOrder(index + 1),
-                width: `${100 / columnsValues}%`
-              }}>
-                <LabelCheck
+              <div
+                  data-testid="labelCheckBox"
                   key={option.label}
+                  style={{
+                  order: getFlexOrder(index + 1),
+                  width: `${100 / columnsValues}%`
+                }}
+              >
+                <LabelCheck
                   option={option}
-                  isCheck={checkValues && checkValues.indexOf(option.value) != -1}
+                  isCheck={checkValues && checkValues.indexOf(option.value) !== -1}
                   onCheckChange={onCheckChange}
                 />
               </div>

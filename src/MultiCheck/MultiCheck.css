@@ -1,3 +1,5 @@
 /* TODO */
 .MultiCheck {
+    display: flex;
+    flex-wrap:wrap;
 }

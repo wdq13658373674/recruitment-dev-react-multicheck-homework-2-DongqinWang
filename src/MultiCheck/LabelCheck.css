@@ -1,0 +1,9 @@
+/* TODO */
+.LabelCheck {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+.LabelCheck .Checkbox{
+    margin-right:10px;
+}
