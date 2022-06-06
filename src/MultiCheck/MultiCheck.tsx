@@ -54,7 +54,7 @@ export const MultiCheck: FC<Props> = (props) => {
   // initialize checkValues
   useEffect(() => {
     if (values) {
-      const existValues = options.map(option=>option.value).filter(value => values.indexOf(value) !== -1);
+      const existValues = options.map(option => option.value).filter(value => values.indexOf(value) !== -1);
       existValues.length !== checkValues.length && setCheckValues(existValues);
     }
   }, [values, options]);
@@ -82,7 +82,7 @@ export const MultiCheck: FC<Props> = (props) => {
    * option change
    * @param target : eventTarget
    */
-  function onCheckChange(e:any) {
+  function onCheckChange(e: React.ChangeEvent<HTMLInputElement>) {
     let target = e.target;
     if (target.checked) {
       const newCheckArr = [...checkValues, target.value];
@@ -98,7 +98,7 @@ export const MultiCheck: FC<Props> = (props) => {
    * select all change
    * @param e : eventT
    */
-  function onCheckAllChange(e:any) {
+  function onCheckAllChange(e: React.ChangeEvent<HTMLInputElement>) {
     let target = e.target;
     if (target.checked) {
       const newCheckArr = options.map((option: Option) => {
@@ -115,39 +115,38 @@ export const MultiCheck: FC<Props> = (props) => {
    * Make the column even
    * @param index : option index
    */
-  function getFlexOrder(index: number):number {
-      let optionLen = options.length+1;
-      let maxRows = Math.ceil(optionLen / columnsValues);
-      let fillColumns = optionLen % columnsValues;
-      let column = Math.floor(index / maxRows);
-      let row =(index - (column * maxRows));
+  function getFlexOrder(index: number): number {
+    let optionLen = options.length + 1;
+    let maxRows = Math.ceil(optionLen / columnsValues);
+    let fillColumns = optionLen % columnsValues;
+    let column = Math.floor(index / maxRows);
+    let row = (index - (column * maxRows));
 
-      if(fillColumns !== 0
-          && (column > fillColumns || (column === fillColumns && row === (maxRows-1)))
-      ){
-        row+=1;
-          if(row >= (maxRows-1)){
-              row = 0;
-              column+=1;
-          }
+    if (fillColumns !== 0
+      && (column > fillColumns || (column === fillColumns && row === (maxRows - 1)))
+    ) {
+      row += 1;
+      if (row >= (maxRows - 1)) {
+        row = 0;
+        column += 1;
       }
+    }
 
-      let order = column + row * columnsValues;
+    let order = column + row * columnsValues;
 
-      return order;
+    return order;
   }
 
   return <div>
     <Card
-        data-testid="card"
-        title={label}
+      data-testid="card"
+      title={label}
     >
-      {/*<div>{label}</div>*/}
       <div className="MultiCheck">
 
         {/* select all option*/}
         <div
-            data-testid="selectAll"
+          data-testid="selectAll"
           style={{
             width: `${100 / columnsValues}%`,
           }}
@@ -167,9 +166,9 @@ export const MultiCheck: FC<Props> = (props) => {
           options.map((option: Option, index: number) => {
             return (
               <div
-                  data-testid="labelCheckBox"
-                  key={option.label}
-                  style={{
+                data-testid="labelCheckBox"
+                key={option.label}
+                style={{
                   order: getFlexOrder(index + 1),
                   width: `${100 / columnsValues}%`
                 }}
